@@ -1,0 +1,29 @@
+<include file="Public/header" />
+	<div class="container">
+		<!-- 活动主题 -->
+		<div class="row activity-title">
+			<p>{$title}</p>
+		</div>
+		<div class="row activity-content">
+			<p>{$content}</p>
+		</div>
+		<div class="row activity-time">
+			<p>活动执行时间：{$strDatetime} —— {$endDatetime}</p>
+		</div>
+		<div class="row options">
+			<volist name="options" id="vo">
+				<div class="option_item">
+					<div class="option_item_content">
+						{$vo.options_content}
+					</div>
+					<div class="option_item_num">
+						已投票数：{$vo.num}
+					</div>
+					<div class="option_item_link">
+						<a href="__URL__/vote/id/{$vo.id}">我要投票</a>
+					</div>
+				</div>
+			</volist>
+		</div>
+	</div>
+<include file="Public/footer" />
