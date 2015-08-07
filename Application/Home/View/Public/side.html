@@ -1,45 +1,72 @@
 <div class="left-side col-xs-2">
-		<!-- <div class="row ">
-			<ul class="nav nav-pills nav-stacked">
-				<li role="presentation" class="active"><a href="__URL__/usermaintain">用户维护</a></li>
-				<li role="presentation"><a href="__URL__/activitymaintain">活动维护</a></li>
-				<li role="presentation"><a href="__URL__/optionmaintain">选项维护</a></li>
-			</ul>
-		</div> -->
-		<div class="accordion" id="accordion-910278">
-			<div class="accordion-group">
-				<div class="accordion-heading">
-					 <button class="accordion-toggle btn btn-primary btn-block" data-toggle="collapse" data-parent="#accordion-910278" href="#accordion-element-314631">用户维护</button>
-				</div>
-				<div id="accordion-element-314631" class="accordion-body in collapse">
-					<div class="accordion-inner">
-						<a href="__APP__/Home/admin/userlist">用户列表</a>
-					</div>
-					<div class="accordion-inner">
-						<a href="__URL__/usermaintain">用户维护</a>
-					</div>
-				</div>
+	<ul class="nav nav-list sidebar">
+		<li class="nav-header">
+			用户维护
+		</li>
+		<li {$sideOrder|isActive=###,"userlist"}>
+			<a href="__APP__/Home/admin/userlist">用户列表</a>
+		</li>
+		<li {$sideOrder|isActive=###,"activityuser"}>
+			<a href="__APP__/Home/admin/activityuser">活动用户</a>
+		</li>
+		<li class="nav-header">
+			活动维护
+		</li>
+		<li {$sideOrder|isActive=###,"createactivity"}>
+			<a href="__APP__/Home/admin/createactivity">创建活动</a>
+		</li>
+		<li {$sideOrder|isActive=###,"activitylist"}>
+			<a href="__APP__/Home/admin/activitylist">活动列表</a>
+		</li>
+		<li class="nav-header">
+			选项维护
+		</li>
+		<li {$sideOrder|isActive=###,"addoptions"}>
+			<a href="__APP__/Home/admin/addoptions">添加选项</a>
+		</li>
+		<li class="divider">
+		</li>
+		<li>
+			<a href="#">帮助</a>
+		</li>
+	</ul>
+	<!-- <div class="accordion" id="accordion-910278">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				 <button class="accordion-toggle btn btn-primary btn-block" data-toggle="collapse" data-parent="#accordion-910278" href="#accordion-element-314631">用户维护</button>
 			</div>
-			<div class="accordion-group">
-				<div class="accordion-heading">
-					 <button class="accordion-toggle btn btn-primary btn-block" data-toggle="collapse" data-parent="#accordion-910278" href="#accordion-element-866551">活动维护</button>
+			<div id="accordion-element-314631" class="accordion-body in collapse">
+				<div class="accordion-inner">
+					<a href="__APP__/Home/admin/userlist">用户列表</a>
 				</div>
-				<div id="accordion-element-866551" class="accordion-body collapse">
-					<div class="accordion-inner">
-						<a href="__URL__/createactivity">创建活动</a>
-					</div>
-				</div>
-			</div>
-			<div class="accordion-group">
-				<div class="accordion-heading">
-					 <button class="accordion-toggle btn btn-primary btn-block" data-toggle="collapse" data-parent="#accordion-910278" href="#accordion-element-866552">选项维护</button>
-				</div>
-				<div id="accordion-element-866552" class="accordion-body collapse">
-					<div class="accordion-inner">
-						<a href="__URL__/caoptions">添加活动选项</a>
-					</div>
+				<div class="accordion-inner active">
+					<a href="__APP__/Home/admin/usermaintain">用户维护</a>
 				</div>
 			</div>
 		</div>
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				 <button class="accordion-toggle btn btn-primary btn-block" data-toggle="collapse" data-parent="#accordion-910278" href="#accordion-element-866551">活动维护</button>
+			</div>
+			<div id="accordion-element-866551" class="accordion-body collapse">
+				<div class="accordion-inner">
+					<a href="__APP__/Home/admin/createactivity">创建活动</a>
+				</div>
+				<div class="accordion-inner">
+					<a href="__APP__/Home/admin/activitylist">活动列表</a>
+				</div>
+			</div>
+		</div>
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				 <button class="accordion-toggle btn btn-primary btn-block" data-toggle="collapse" data-parent="#accordion-910278" href="#accordion-element-866552">选项维护</button>
+			</div>
+			<div id="accordion-element-866552" class="accordion-body collapse">
+				<div class="accordion-inner">
+					<a href="__APP__/Home/admin/addoptions">添加活动选项</a>
+				</div>
+			</div>
+		</div>
+	</div> -->
 
 </div>

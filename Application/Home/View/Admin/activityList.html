@@ -58,20 +58,7 @@
 	}
 </script>
 <div class="row col-xs-10 insert_row">
-	<form action="__URL__/insertaccount" method="post">
-		<div class="row col-xs-2">
-		新增用户：
-		</div>
-		<div class="row col-xs-4">
-			用户名：<input type="text" name="newaccount">
-		</div>
-		<div class="row col-xs-4">
-			密码：<input type="text" name="newpasswd">
-		</div>
-		<div class="row col-xs-3">
-			<button type="submit" class="btn btn-primary btn-sm">新增</button>
-		</div>
-	</form>
+		<button class="btn btn-primary btn-sm" onclick="window.location='__URL__/createactivity'">新增活动</button>
 </div>
 <div class="row col-xs-10 activity">
 	<ul class="list-group">
@@ -87,8 +74,8 @@
 	  	<li class="list-group-item">
 	  		<div class="row col-xs-2">{$vo.title}</div>
 	  		<div class="row col-xs-4">{$vo.content}</div>
-	  		<div class="row col-xs-2">{$vo.start_datetime}</div>
-	  		<div class="row col-xs-2">{$vo.end_datetime}</div>
+	  		<div class="row col-xs-2">{$vo.start_datetime|substr=0,10}</div>
+	  		<div class="row col-xs-2">{$vo.end_datetime|substr=0,10}</div>
 		  	<div class="row col-xs-2">
 		  		<if condition="$vo.status == 1">
 		  			<a href="__URL__/toggleaccount/id/{$vo.id}">禁用</a>

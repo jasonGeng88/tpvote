@@ -13,7 +13,14 @@
 .list-group li.list-group-item div{
 	text-align: center;
 }
-.container{
+.nav-list>.active>a, .nav-list>.active>a:hover, .nav-list>.active>a:focus{
+	color: #ffffff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+	background-color: #0088cc;
+}
+
+
+/*.container{
 	margin: 0;
 	padding: 0;
-}
+}*/

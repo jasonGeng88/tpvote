@@ -1,4 +1,9 @@
-
+$(function(){
+	// $(".nav.sidebar li").click(function(){
+	// 	$(".nav.sidebar li").removeClass('active');
+	// 	$(this).addClass('active');
+	// });
+})
 
 function ajaxreturn(form){
 	// var form =$(form);

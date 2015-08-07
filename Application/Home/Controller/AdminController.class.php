@@ -6,33 +6,59 @@ use Home\Controller\CommonController;
 */
 class AdminController extends CommonController
 {
-	// public function _before_index(){
-	// 	session_start();
-	// 	echo(11);die;
- //        // session_unset();
- //        // session_destroy();
-	// 	if (!isset($_SESSION['USERID'])) {
- //            $this->error('请重新登录');die;
- //        }else{
- //        	$userId=$_SESSION['USERID'];
- //        }
-	// }
 	/**
 	 * 用户维护
 	 */
 	public function userlist(){
-		session_start();
+		$this->checkUserId();
     	$userId=$_SESSION['USERID'];
     	$userArr=M('user')->select();
     	$this->assign('userArr',$userArr);
+    	$this->assign('sideOrder','userlist');
     	$this->display('userlist');
 		// var_dump($userId);die;	
+	}
+
+	/**
+	 * 活动用户
+	 */
+	public function activityuser(){
+		$this->checkUserId();
+		// $activityId=$_GET['id'];
+		$param['status']=1;
+		$activityArr=M('activity')->field('id,title')->where($param)->select();
+    	$this->assign('activityArr',$activityArr);
+    	$this->assign('sideOrder','activityuser');
+		$this->display('activityuser');
+	}
+
+	/**
+	 * 活用用户列表
+	 */
+	public function activityuserlist(){
+		$activityId=$_GET['id'];
+		$activityParam['activity_id']=$activityId;
+		$activityParam['status']=1;
+		$sql='SELECT vu.id,vu.account,au.status FROM vote_activity_user AS au LEFT JOIN vote_user AS vu ON au.user_id=vu.id WHERE au.status=1 AND au.activity_id='.$activityId;
+		$res=M()->query($sql);
+		$this->assign('userlist',$res);
+		$this->assign('activityId',$activityId);
+		$this->activityuser();
+		// M('activity_user')->field('user_id')->where($activityParam)->select();
+	}
+
+	/**
+	 * 添加活动用户
+	 */
+	public function addactivityusers(){
+		$addusers=$_POST['addusers'];
 	}
 
 	/**
 	 * 新增用户
 	 */
 	public function insertaccount(){
+		$this->checkUserId();
 		$account=$_POST['newaccount'];
 		$passwd=$_POST['newpasswd'];
 		$param['account']=$account;
@@ -52,8 +78,10 @@ class AdminController extends CommonController
 	 * 账号密码修改
 	 */
 	public function changepasswd(){
+		$this->checkUserId();
 		$id=$_POST['userid'];
 		$passwd=$_POST['passwd'];
+		$this->checkParams(array($id,$passwd));
 		$sql='UPDATE vote_user SET passwd="'.$passwd.'" WHERE id='.$id;
 		$res=M()->execute($sql);
 		if (empty($res)) {
@@ -67,6 +95,7 @@ class AdminController extends CommonController
 	 * 账号状态切换
 	 */
 	public function toggleaccount(){
+		$this->checkUserId();
 		$id=$_GET['id'];
 		$sql='UPDATE vote_user SET status=status^1 WHERE id='.$id;
 		$res=M()->execute($sql);
@@ -78,16 +107,120 @@ class AdminController extends CommonController
 	}
 
 	/**
-	 * 添加活动
+	 * 活动列表
+	 */
+	public function activitylist(){
+		$this->checkUserId();
+		$activityArr=M('activity')->where('status=1')->order('create_datetime desc')->select();
+		$this->assign('sideOrder','activitylist');
+		$this->assign('activityArr',$activityArr);
+		$this->display('activitylist');
+	}
+
+	/**
+	 * 创建新活动
 	 */
 	public function createactivity(){
+		$this->checkUserId();
+		if (IS_POST) {
+			$title=$_POST['title'];
+			$content=$_POST['content'];
+			$starttime=$_POST['starttime'];
+			$endtime=$_POST['endtime'];
+        	$this->checkParams(array($title,$content,$starttime,$endtime));
+        	if ($starttime>$endtime) {
+				$this->error('活动开始不能早于结束时间！');
+        	}
+        	$res=M('activity')->where('title="'.$title.'"')->find();
+        	if (!empty($res)) {
+				$this->error('活动已存在！');
+        	}
+			$param['title']=$title;
+			$param['content']=$content;
+			$param['start_datetime']=$starttime.' 00:00:00';
+			$param['end_datetime']=$endtime.' 23:59:59';
+			$param['create_datetime']=date('Y-m-d H:i:s');
+			$param['status']=1;
+			M('activity')->data($param)->add();
+			$this->activitylist();
+		}else{
+			$this->assign('sideOrder','createactivity');
+			$this->display('createactivity');
+		}
+	}
+
+	/**
+	 * 添加活动选项
+	 */
+	public function addoptions(){
+		$this->checkUserId();
 		if (IS_POST) {
 			# code...
 		}else{
-			$activityArr=M('activity')->where('status=1')->select();
-			$this->assign('activityArr',$activityArr);
-			$this->display('activity');
+			$curDate=date('Y-m-d H:i:s');
+			$param['start_datetime']=array('lt',$curDate);
+			$param['end_datetime']=array('gt',$curDate);
+			$param['status']=1;
+			$res=M('activity')->field('id,title')->where($param)->select();
+			if (empty($res)) {
+				$this->error('当前无活动，请去添加活动');
+			}else{
+				$this->assign('sideOrder','addoptions');
+				$this->assign('activity',$res);
+				$this->display('addoption');
+			}
 		}
+	}
+
+	/**
+	 * 查看选项列表
+	 */
+	public function optionlist(){
+		$this->checkUserId();
+		$id=$_GET['id'];
+		$param['activity_id']=$_GET['id'];
+		$param['status']=1;
+		$optionsArr=M('activity_options')->field('id,options_content')->where($param)->select();
+		// var_dump($optionsArr);die;
+		$this->assign('activityId',$id);
+		$this->assign('optionsArr',$optionsArr);
+		$this->addoptions();
+	}
+
+	/**
+	 * 删除选项
+	 */
+	public function deleteoption(){
+		$this->checkUserId();
+		$deleteid=$_GET['deleteid'];
+		$deleteParam['id']=$deleteid;
+		$deleteRes=M('activity_options')->where($deleteParam)->delete();
+		if (empty($deleteRes)) {
+			$this->error('删除失败！');
+		}else{
+			$this->optionlist();
+		}
+	}
+
+	/**
+	 * 添加选项
+	 */
+	public function addoption(){
+		$this->checkUserId();
+		$content=$_GET['content'];
+		$activityId=$_GET['id'];
+		$addparam['options_content']=$content;
+		$addparam['activity_id']=$activityId;
+		$addparam['status']=1;
+		$isnull=M('activity_options')->where($addparam)->find();
+		if (empty($isnull)) {
+			$addparam['create_datetime']=date('Y-m-d H:i:s');
+			M('activity_options')->data($addparam)->add();
+			$this->optionlist();
+		}else{
+			$this->error('请不要重复插入！');
+		}
+		
 	}
 
 	/**
@@ -96,4 +229,10 @@ class AdminController extends CommonController
 	public function optionmaintain(){
 
 	}
+
+
+
+
+
+
 }

@@ -25,6 +25,18 @@ class CommonController extends Controller
 	}
 
 	/**
+	 * 验证session['USERID']是否存在
+	 */
+	public function checkUserId(){
+		session_start();
+		if (isset($_SESSION['USERID'])) {
+			$this->assign('userid',$_SESSION['USERID']);
+		}else{
+			$this->error('请重新登录');die;
+		}
+	}
+
+	/**
 	 * ajaxreturn-success
 	 */
 	public function success($data){

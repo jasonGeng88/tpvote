@@ -18,4 +18,15 @@
 		}
 		
 	}
+
+	/**
+	 * 定位侧边栏
+	 */
+	function isActive($sideOrder,$value) {
+		if ($sideOrder==$value) {
+			return 'class="active"';
+		}else{
+			return '';
+		}
+	}
 ?>
