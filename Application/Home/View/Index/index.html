@@ -1,29 +1,29 @@
 <include file="Public/header" />
-	<div class="container">
-		<!-- 活动主题 -->
-		<div class="row activity-title">
-			<p>{$title}</p>
-		</div>
-		<div class="row activity-content">
-			<p>{$content}</p>
-		</div>
-		<div class="row activity-time">
-			<p>活动执行时间：{$strDatetime} —— {$endDatetime}</p>
-		</div>
-		<div class="row options">
-			<volist name="options" id="vo">
-				<div class="option_item">
-					<div class="option_item_content">
-						{$vo.options_content}
-					</div>
-					<div class="option_item_num">
-						已投票数：{$vo.num}
-					</div>
-					<div class="option_item_link">
-						<a href="__URL__/vote/id/{$vo.id}">我要投票</a>
-					</div>
-				</div>
-			</volist>
+<div class="row col-xs-12">
+<!-- <div class="jumbotron">
+	<h1>{$title}</h1>
+	<p>{$content}</p>
+	<p>活动执行时间：{$strDatetime} —— {$endDatetime}</p>
+	<p><a class="btn btn-primary btn-lg" href="#" role="button">查看结果</a></p>
+</div> -->
+
+	<volist name="activityArr" id="vo" key="k">
+	<div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+			<img src="..." alt="...">
+			<div class="caption">
+				<!-- <h3>{$k}</h3> -->
+				<p>活动名称：{$vo.title}</p>
+				<p>活动内容：{$vo.content|substr=0,20}...</p>
+				<p>投票开始时间：{$vo.start_datetime}</p>
+				<p>投票截止时间：{$vo.end_datetime}</p>
+				<p>
+				<a href="__URL__/activityInfo/id/{$vo.id}" class="btn btn-primary" role="button">前往&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a> 
+				</p>
+			</div>
 		</div>
 	</div>
+	</volist>
+</div>
+
 <include file="Public/footer" />

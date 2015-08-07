@@ -37,11 +37,24 @@ class AdminController extends CommonController
 	 */
 	public function activityuserlist(){
 		$activityId=$_GET['id'];
-		$activityParam['activity_id']=$activityId;
-		$activityParam['status']=1;
-		$sql='SELECT vu.id,vu.account,au.status FROM vote_activity_user AS au LEFT JOIN vote_user AS vu ON au.user_id=vu.id WHERE au.status=1 AND au.activity_id='.$activityId;
-		$res=M()->query($sql);
-		$this->assign('userlist',$res);
+		//激活的用户
+		$sql='SELECT vu.id,vu.account FROM vote_activity_user AS au LEFT JOIN vote_user AS vu ON au.user_id=vu.id WHERE au.activity_id='.$activityId;
+		$useractive=M()->query($sql);
+		$arr1=array();
+		foreach ($useractive as $key => $value) {
+			$arr1[]=$value['id'];
+		}
+		//未激活的用户
+		$userinactive=array();
+		$res=M('user')->where('status=1 AND type=0')->select();
+		foreach ($res as $k => $v) {
+			if (!in_array($v['id'], $arr1)) {
+				$userinactive[$v['id']]['id']=$v['id'];
+				$userinactive[$v['id']]['account']=$v['account'];
+			}
+		}
+		$this->assign('useractive',$useractive);
+		$this->assign('userinactive',$userinactive);
 		$this->assign('activityId',$activityId);
 		$this->activityuser();
 		// M('activity_user')->field('user_id')->where($activityParam)->select();
@@ -50,8 +63,26 @@ class AdminController extends CommonController
 	/**
 	 * 添加活动用户
 	 */
-	public function addactivityusers(){
-		$addusers=$_POST['addusers'];
+	public function addActivityUser(){
+		$userId=$_GET['addid'];
+		$activityId=$_GET['id'];
+		$addParam['activity_id']=$activityId;
+		$addParam['user_id']=$userId;
+		$addParam['create_datetime']=date('Y-m-d H:i:s');
+		M('activity_user')->data($addParam)->add();
+		$this->activityuserlist();
+	}
+
+	/**
+	 * 删除活动用户
+	 */
+	public function deleteActivityUser(){
+		$userId=$_GET['deleteid'];
+		$activityId=$_GET['id'];
+		$deleteParam['activity_id']=$activityId;
+		$deleteParam['user_id']=$userId;
+		$res=M('activity_user')->where($deleteParam)->delete();
+		$this->activityuserlist();
 	}
 
 	/**
@@ -158,8 +189,8 @@ class AdminController extends CommonController
 			# code...
 		}else{
 			$curDate=date('Y-m-d H:i:s');
-			$param['start_datetime']=array('lt',$curDate);
-			$param['end_datetime']=array('gt',$curDate);
+			// $param['start_datetime']=array('lt',$curDate);
+			// $param['end_datetime']=array('gt',$curDate);
 			$param['status']=1;
 			$res=M('activity')->field('id,title')->where($param)->select();
 			if (empty($res)) {

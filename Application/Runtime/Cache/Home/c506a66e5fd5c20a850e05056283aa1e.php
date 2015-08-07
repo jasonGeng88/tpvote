@@ -65,7 +65,7 @@
       </form> -->
       <ul class="nav navbar-nav navbar-right">
       	<li>
-      	<?php if($userid): ?><a href="/tpvote/index.php/Home/Index/logout">退出</a>
+      	<?php if($userid): ?><a href="/tpvote/index.php/Home/index/logout">退出</a>
 	  	<?php else: ?><a href="/tpvote/index.php">登录</a><?php endif; ?>
         </li>
         <!-- <li class="dropdown">
@@ -91,8 +91,8 @@
 		<li <?php echo (isActive($sideOrder,"userlist")); ?>>
 			<a href="/tpvote/index.php/Home/admin/userlist">用户列表</a>
 		</li>
-		<li>
-			<a href="/tpvote/index.php/Home/admin/userlist">用户维护</a>
+		<li <?php echo (isActive($sideOrder,"activityuser")); ?>>
+			<a href="/tpvote/index.php/Home/admin/activityuser">活动用户</a>
 		</li>
 		<li class="nav-header">
 			活动维护
@@ -111,9 +111,9 @@
 		</li>
 		<li class="divider">
 		</li>
-		<li>
+		<!-- <li>
 			<a href="#">帮助</a>
-		</li>
+		</li> -->
 	</ul>
 	<!-- <div class="accordion" id="accordion-910278">
 		<div class="accordion-group">

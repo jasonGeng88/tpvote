@@ -1,0 +1,123 @@
+<include file="Public/header" />
+<style type="text/css">
+	.layout{
+		width: 100%;
+		height: 100%;
+		background: #000000;
+		opacity: 0.7;
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: none;
+		z-index: 5;
+	}
+	.result_options{
+		position: absolute;
+		top: 20%;
+		left: 25%;
+		width: 50%;
+		z-index: 10;
+		background: #ffffff;
+		height: 60%;
+		border-radius: 8px;
+		overflow: auto;
+		display: none;
+	}
+</style>
+<script type="text/javascript">
+	
+	function result(){
+		$.ajax({
+             type: "GET",
+             url: "__URL__/countoptions/id/{$activityInfo.id}",
+             dataType: "json",
+             success: function(data){
+             			 $('.result_options').html('');
+                         console.log(data.countInfo);
+                         $.each(data.countInfo,function(n,value){
+                         	// alert(value.options_content+' '+value.num); 
+                         	var str='<div class="option_name">';
+                         	str+=value.options_content+'（'+value.num+'）：</div>';
+                         	str+='<div class="progress">';
+                         	str+='<div class="progress-bar" role="progressbar" aria-valuenow="'+value.num/data.sum*100+'" aria-valuemin="0" aria-valuemax="100" style="width: '+value.num/data.sum*100+'%;">';
+                         	str+=value.num/data.sum*100+'%';
+                         	str+='</div></div>';
+                         	// console.log(str);
+                         	$('.result_options').append(str);
+                         });
+                         $(".layout").css('display','block');
+                         $(".result_options").css('display','block');
+                         $("body").css('overflow','hidden');
+                      },
+             error: function(){
+             	alert('操作失败！');
+             }
+         });
+		console.log("__URL__/countoptions/id/{$activityInfo.id}");
+	}
+</script>
+<div class="row col-xs-12">
+	<ol class="breadcrumb">
+	  <li><a href="__URL__">首页</a></li>
+	  <li class="active">活动</li>
+	</ol>
+	<div class="jumbotron">
+		<h1>{$activityInfo.title}</h1>
+		<p>{$activityInfo.content}</p>
+		<p>活动执行时间：{$activityInfo.start_datetime} —— {$activityInfo.end_datetime}</p>
+		<p><a class="btn btn-primary btn-lg count_result" role="button" onclick="result()">查看结果</a></p>
+		<!-- <p><a id="modal-316696" href="#modal-container-316696" role="button" class="btn" data-toggle="modal">asds</a></p> -->
+		<!-- <p><a class="btn btn-primary btn-lg count_result" href="__URL__/countoptions/id/{$activityInfo.id}" role="button">查看结果</a></p> -->
+	</div>
+
+	<volist name="optionsArr" id="vo" key="k">
+	<div class="col-sm-6 col-md-4">
+		<div class="thumbnail">
+			<img src="..." alt="...">
+			<div class="caption">
+				<!-- <h3>{$k}</h3> -->
+				<p><span class="badge">{$k}</span>&nbsp;&nbsp;&nbsp;{$vo.options_content}</p>
+				<p>当前票数：{$vo.num}</p>
+				<p>
+				<a href="__URL__/vote/id/{$activityInfo.id}/optionid/{$vo.id}" class="btn btn-primary" role="button">我要投票</a> 
+				</p>
+			</div>
+		</div>
+	</div>
+	</volist>
+</div>
+<div class="layout"></div>
+<div class="row col-xs-12 result_options">
+</div>
+
+<!-- <div id="modal-container-316696" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-header">
+					 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">
+						标题栏
+					</h3>
+				</div>
+				<div class="modal-body">
+					<p>
+						显示
+					</p>
+				</div>
+				<div class="modal-footer">
+					 <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <button class="btn btn-primary">保存设置</button>
+				</div>
+			</div> -->
+<include file="Public/footer" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+

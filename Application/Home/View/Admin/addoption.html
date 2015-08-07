@@ -30,10 +30,10 @@
 		  <label>选择活动主题：</label>
 		  <select name="activity" id="activity">
 		  	<volist name="activity" id="vo">
-		  		<if condition='$activityId neq $vo.id'>
-	  			<option value="{$vo.id}">{$vo.title}</option>
+		  		<if condition='$activityId eq $vo["id"]'>
+	  			<option value="{$vo.id}" selected>{$vo.title}</option>
 		  			<else />
-		  			<option value="{$vo.id}" selected>{$vo.title}</option>
+		  			<option value="{$vo.id}" >{$vo.title}</option>
 		  		</if>
 		  	</volist>
 		  </select>
