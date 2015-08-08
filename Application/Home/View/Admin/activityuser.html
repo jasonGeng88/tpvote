@@ -1,14 +1,50 @@
 <include file="Public/header" />
 <include file="Public/side" />
 <script type="text/javascript">
+	$(function(){
+		var beforeUrl=window.location.href;
+		// console.log(beforeUrl.match("addAllUser"));return false;
+		if (beforeUrl.match("addAllUser")) {
+			$(".addalluser-btn").css("display","none");
+		};
+		// $("body").click(function(e){
+		// 	alert(e.target.id);
+		// })
+		// $("li.list-group-item").mouseout(function(){
+		// 	console.log(11);
+		// 	$("input[name='maxnum']").attr('disabled',true);
+		// 	$(".changenumbtn").css("display","block");
+		// 	$(".submitnumbtn").css("display","none");
+		// });
+	})
 	function confirmActivity(){
 		var avtivityId=$('#activity').val();
 		window.location='__URL__/activityuserlist/id/'+avtivityId;
 	}
-	// function addactivityusers(){
-	// 	var addusers=$("#addusers").val();
-
-	// }
+	function changeVoteNum(id){
+		$("#maxnum"+id).attr('disabled',false);
+		$("#maxnum"+id).focus();
+		$(".changenum"+id).css("display","none");
+		$(".submitnum"+id).css("display","block");
+		$(".cancelnum"+id).css("display","block");
+	}
+	function cancelVoteNum(id){
+		$("#maxnum"+id).attr('disabled',true);
+		$("#maxnum"+id).focus();
+		$(".submitnum"+id).css("display","none");
+		$(".cancelnum"+id).css("display","none");
+		$(".changenum"+id).css("display","block");
+	}
+	function submitVoteNum(id){
+		var num=$("#maxnum"+id).val();
+		var url="__URL__/changeVoteNumid/id/{$activityId}/changeid/"+id+"/num/"+num;
+		window.location=url;
+	}
+	function addAllUser(){
+		var url="__URL__/addAllUser/id/{$activityId}/activeids/{$activeIds}";
+		// console.log(url);return false;
+		window.location=url;
+	}
 </script>
 <style type="text/css">
 	ul.optionlist li span:nth-child(1){
@@ -20,6 +56,19 @@
 	}
 	button.confirm-activity{
 		padding: 0px 10px;
+	}
+	ul input[name="maxnum"]{
+		line-height: 36px;
+		height: 36px;
+		margin: 4px 0;
+		padding: 0 10px;
+		margin-right: 5px;
+		float: left;
+	}
+	.submitnumbtn,.cancelnumbtn{
+		display: none;
+		float: left;
+		margin-right: 5px;
 	}
 </style>
 
@@ -49,23 +98,43 @@
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="panel-220731">
-					<ul class="list-group userlist">
+					<ul class="list-group userlist active">
+						<li class="list-group-item">
+							<span class="col-xs-1">序号</span>
+							<span class="col-xs-5">用户</span>
+							<span class="col-xs-4">最大投票数</span>
+							<span class="col-xs-2">操作</span>
+						</li>
 						<volist name="useractive" id="vo" key="k">
 						<li class="list-group-item">
-							<span>{$k}、</span>
-							<span>{$vo.account}</span>
-							<span><a href="__URL__/deleteActivityUser/deleteid/{$vo.id}/id/{$activityId}">删除</a></span>
+							<span class="col-xs-1">{$k}、</span>
+							<span class="col-xs-5">{$vo.account}</span>
+							<span class="col-xs-4">
+							<input type="text" value="{$vo.num}" name="maxnum" id="maxnum{$vo.id}" disabled>								
+							<a href="javascript:void(0)" onclick="changeVoteNum({$vo.id})" class="changenumbtn changenum{$vo.id}">修改</a>
+							<a href="javascript:void(0)" onclick="submitVoteNum({$vo.id})" class="submitnumbtn submitnum{$vo.id}">提交</a>
+							<a href="javascript:void(0)" onclick="cancelVoteNum({$vo.id})" class="cancelnumbtn cancelnum{$vo.id}">取消</a>
+							</span>
+							<span class="col-xs-2"><a href="__URL__/deleteActivityUser/deleteid/{$vo.id}/id/{$activityId}">删除</a></span>
 						</li>
 						</volist>
 					</ul>
 				</div>
 				<div class="tab-pane" id="panel-618767">
-					<ul class="list-group userlist">
+					<notempty name="activeIds">
+					<button class="btn btn-primary btn-block addalluser-btn" onclick="addAllUser()">添加所有用户</button>
+					</notempty>
+					<ul class="list-group userlist inactive">
+						<li class="list-group-item">
+							<span class="col-xs-1">序号</span>
+							<span class="col-xs-9">用户</span>
+							<span class="col-xs-2">操作</span>
+						</li>
 						<volist name="userinactive" id="vo" key="k">
 						<li class="list-group-item">
-							<span>{$k}、</span>
-							<span>{$vo.account}</span>
-							<span><a href="__URL__/addActivityUser/addid/{$vo.id}/id/{$activityId}">添加</a></span>
+							<span class="col-xs-1">{$k}、</span>
+							<span class="col-xs-9">{$vo.account}</span>
+							<span class="col-xs-2"><a href="__URL__/addActivityUser/addid/{$vo.id}/id/{$activityId}">添加</a></span>
 						</li>
 						</volist>
 					</ul>

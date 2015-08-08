@@ -41,9 +41,9 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <!-- <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
+       <ul class="nav navbar-nav">
+        <li class="active"><a href="/tpvote/index.php">首页 <span class="sr-only">(current)</span></a></li>
+        <!-- <li><a href="#">Link</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -55,9 +55,9 @@
             <li role="separator" class="divider"></li>
             <li><a href="#">One more separated link</a></li>
           </ul>
-        </li>
+        </li> -->
       </ul>
-      <form class="navbar-form navbar-left" role="search">
+      <!--<form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
         </div>
@@ -65,7 +65,7 @@
       </form> -->
       <ul class="nav navbar-nav navbar-right">
       	<li>
-      	<?php if($userid): ?><a href="/tpvote/index.php/Home/Admin/logout">退出</a>
+      	<?php if($userid): ?><a href="/tpvote/index.php/Home/index/logout">退出</a>
 	  	<?php else: ?><a href="/tpvote/index.php">登录</a><?php endif; ?>
         </li>
         <!-- <li class="dropdown">
@@ -111,9 +111,9 @@
 		</li>
 		<li class="divider">
 		</li>
-		<li>
+		<!-- <li>
 			<a href="#">帮助</a>
-		</li>
+		</li> -->
 	</ul>
 	<!-- <div class="accordion" id="accordion-910278">
 		<div class="accordion-group">

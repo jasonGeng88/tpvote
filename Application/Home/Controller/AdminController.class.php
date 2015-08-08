@@ -38,7 +38,7 @@ class AdminController extends CommonController
 	public function activityuserlist(){
 		$activityId=$_GET['id'];
 		//激活的用户
-		$sql='SELECT vu.id,vu.account FROM vote_activity_user AS au LEFT JOIN vote_user AS vu ON au.user_id=vu.id WHERE au.activity_id='.$activityId;
+		$sql='SELECT vu.id,vu.account,au.num FROM vote_activity_user AS au LEFT JOIN vote_user AS vu ON au.user_id=vu.id WHERE au.activity_id='.$activityId;
 		$useractive=M()->query($sql);
 		$arr1=array();
 		foreach ($useractive as $key => $value) {
@@ -53,9 +53,14 @@ class AdminController extends CommonController
 				$userinactive[$v['id']]['account']=$v['account'];
 			}
 		}
+		$activeIds=implode(',', $arr1);
+		if (empty($activeIds)) {
+			$activeIds='empty';
+		}
 		$this->assign('useractive',$useractive);
 		$this->assign('userinactive',$userinactive);
 		$this->assign('activityId',$activityId);
+		$this->assign('activeIds',$activeIds);
 		$this->activityuser();
 		// M('activity_user')->field('user_id')->where($activityParam)->select();
 	}
@@ -70,6 +75,38 @@ class AdminController extends CommonController
 		$addParam['user_id']=$userId;
 		$addParam['create_datetime']=date('Y-m-d H:i:s');
 		M('activity_user')->data($addParam)->add();
+		$this->activityuserlist();
+	}
+
+	/**
+	 * 添加所有用户
+	 */
+	public function addAllUser(){
+		$activityId=$_GET['id'];
+		$activeIds=$_GET['activeids'];
+		if ($activeIds != 'empty') {
+			$map['id']  = array('not in',$activeIds.',0');
+		}
+		$map['type']  = 0;
+		$map['status']  = 1;
+		$inactiveArr=M('user')->field('id')->where($map)->select();
+		if (empty($inactiveArr)) {
+			$this->error('当前无用户可以添加！');
+		}
+		$sql='INSERT INTO vote_activity_user (`activity_id`,`user_id`,`create_datetime`) VALUES ';
+		$judgeParam['activity_id']=$activityId;
+		$judgeParam['user_id']=$inactiveArr[0]['id'];
+		$isExist=M('activity_user')->where($judgeParam)->getField('id');
+		if (!empty($isExist)) {
+			$this->error('无能重复添加！');
+		}
+		foreach ($inactiveArr as $key => $value) {
+			$sql.='('.$activityId.','.$value['id'].',"'.date('Y-m-d H:i:s').'"),';
+		}
+		$sql=rtrim($sql,',');
+		$sql.=' ON DUPLICATE KEY UPDATE activity_id=VALUES(activity_id),user_id=VALUES(user_id),create_datetime=VALUES(create_datetime)';
+		// echo($sql);die;
+		M()->execute($sql);
 		$this->activityuserlist();
 	}
 
@@ -103,6 +140,20 @@ class AdminController extends CommonController
 		}else{
 			$this->userlist();
 		}
+	}
+
+	/**
+	 * 修改用户的投票数
+	 */
+	public function changeVoteNumid(){
+		$activityId=$_GET['id'];
+		$changeId=$_GET['changeid'];
+		$num=$_GET['num'];
+		$data['user_id']=$changeId;
+		$data['activity_id']=$activityId;
+		$uParam['num']=$num;
+		$res=M('activity_user')->where($data)->save($uParam);
+		$this->activityuserlist();
 	}
 
 	/**

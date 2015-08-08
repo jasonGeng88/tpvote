@@ -2,7 +2,7 @@
 <style type="text/css">
 	.layout{
 		width: 100%;
-		height: 100%;
+		/*height: 1000%;*/
 		background: #000000;
 		opacity: 0.7;
 		position: absolute;
@@ -45,9 +45,15 @@
                          	// console.log(str);
                          	$('.result_options').append(str);
                          });
+                         var bodyH=$("body").height();
+                         var windowH=$(window).height();
+                         var scrollH= document.body.scrollTop;
+                         // console.log()
+                         $(".layout").css("height",bodyH);
                          $(".layout").css('display','block');
+                         $(".result_options").css('top',(scrollH+windowH/4));
                          $(".result_options").css('display','block');
-                         $("body").css('overflow','hidden');
+                         // $("body").css('overflow','hidden');
                       },
              error: function(){
              	alert('操作失败！');
