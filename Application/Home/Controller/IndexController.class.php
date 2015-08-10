@@ -69,6 +69,7 @@ class IndexController extends CommonController {
         $activityInfo=M('activity')->where('id='.$activityId)->find();
         $sql='SELECT count(vor.id) AS num, vao.id,vao.`options_content` FROM vote_activity_options AS vao LEFT JOIN `vote_options_record` AS vor ON vao.id=vor.option_id WHERE vao.status=1 AND vao.`activity_id`='.$activityId.' GROUP BY vao.id';
         $optionsArr=M()->query($sql);
+        $this->assign('activityId',$activityId);
         $this->assign('userid',$userId);
         $this->assign('activityInfo',$activityInfo);
         $this->assign('optionsArr',$optionsArr);

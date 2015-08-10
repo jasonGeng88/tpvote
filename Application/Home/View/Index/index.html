@@ -1,4 +1,10 @@
 <include file="Public/header" />
+<style type="text/css">
+	.thumbnail img{
+		width: auto;
+		height: 250px;
+	}
+</style>
 <div class="row col-xs-12">
 <!-- <div class="jumbotron">
 	<h1>{$title}</h1>
@@ -10,7 +16,12 @@
 	<volist name="activityArr" id="vo" key="k">
 	<div class="col-sm-6 col-md-4">
 		<div class="thumbnail">
-			<img src="..." alt="...">
+			<?php $dir= C('IMG_ACTIVITY_ADDR').date('m',strtotime($vo['start_datetime'])).'/'.$vo['title'].'.jpg';
+				if (!file_exists($dir)) {
+					$dir=C('IMG_ACTIVITY_ADDR').'default/default.jpg';
+				}
+			?>
+			<img src="{$dir}" alt="...">
 			<div class="caption">
 				<!-- <h3>{$k}</h3> -->
 				<p>活动名称：{$vo.title}</p>

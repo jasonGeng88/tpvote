@@ -79,7 +79,12 @@
 	<volist name="optionsArr" id="vo" key="k">
 	<div class="col-sm-6 col-md-4">
 		<div class="thumbnail">
-			<img src="..." alt="...">
+			<?php $dir= C('IMG_OPTION_ADDR').'a'.$activityId.'/'.$vo['id'].'.jpg';
+				if (!file_exists($dir)) {
+					$dir=C('IMG_OPTION_ADDR').'default/default.jpg';
+				}
+			?>
+			<img src="{$dir}" alt="...">
 			<div class="caption">
 				<!-- <h3>{$k}</h3> -->
 				<p><span class="badge">{$k}</span>&nbsp;&nbsp;&nbsp;{$vo.options_content}</p>

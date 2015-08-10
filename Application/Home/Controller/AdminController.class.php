@@ -210,6 +210,36 @@ class AdminController extends CommonController
 			$starttime=$_POST['starttime'];
 			$endtime=$_POST['endtime'];
         	$this->checkParams(array($title,$content,$starttime,$endtime));
+			if ($_FILES["myfile"]["error"] > 0)
+			  {
+			 	$this->error("Error: " . $_FILES["myfile"]["error"] . "<br />");
+			  }
+			else
+			  {
+			  // echo(C('UPLOAD_ACTIVITY_ADDR'));
+			  // echo "Upload: " . $_FILES["myfile"]["name"] . "<br />";
+			  // echo "Type: " . $_FILES["myfile"]["type"] . "<br />";die;
+			  // echo "Size: " . ($_FILES["myfile"]["size"] / 1000*1000) . " M<br />";
+			  // echo "Stored in: " . $_FILES["myfile"]["tmp_name"];die;
+			//文件上传类型
+				$uploadTypes=array('image/jpeg');
+				if (!in_array($_FILES["myfile"]["type"], $uploadTypes)) {
+					$this->error("上传文件类型错误，目前仅支持jpg格式！");
+				}
+				$maxUploadSize=2000000;//2M
+				if ($_FILES["myfile"]["size"]>$maxUploadSize) {
+					$this->error("上传文件最大不能超过2M！");
+				}
+			  	$dir=C('UPLOAD_ACTIVITY_ADDR').date('m',strtotime($starttime)).'/';
+				if (!is_dir($dir)) {
+					mkdir($dir,0777,true);
+				}
+				$newfilename=$dir.$title.'.jpg';
+				$moveRes=move_uploaded_file($_FILES["myfile"]["tmp_name"],$newfilename);
+				if ($moveRes==false) {
+					$this->error("图片上传失败！");
+				}
+			}
         	if ($starttime>$endtime) {
 				$this->error('活动开始不能早于结束时间！');
         	}
@@ -236,22 +266,18 @@ class AdminController extends CommonController
 	 */
 	public function addoptions(){
 		$this->checkUserId();
-		if (IS_POST) {
-			# code...
+		$curDate=date('Y-m-d H:i:s');
+		// $param['start_datetime']=array('lt',$curDate);
+		// $param['end_datetime']=array('gt',$curDate);
+		$param['status']=1;
+		$res=M('activity')->field('id,title')->where($param)->select();
+		if (empty($res)) {
+			$this->error('当前无活动，请去添加活动');
 		}else{
-			$curDate=date('Y-m-d H:i:s');
-			// $param['start_datetime']=array('lt',$curDate);
-			// $param['end_datetime']=array('gt',$curDate);
-			$param['status']=1;
-			$res=M('activity')->field('id,title')->where($param)->select();
-			if (empty($res)) {
-				$this->error('当前无活动，请去添加活动');
-			}else{
-				$this->assign('sideOrder','addoptions');
-				$this->assign('activity',$res);
-				$this->display('addoption');
-			}
-		}
+			$this->assign('sideOrder','addoptions');
+			$this->assign('activity',$res);
+			$this->display('addoption');
+		}	
 	}
 
 	/**
@@ -259,8 +285,8 @@ class AdminController extends CommonController
 	 */
 	public function optionlist(){
 		$this->checkUserId();
-		$id=$_GET['id'];
-		$param['activity_id']=$_GET['id'];
+		$id=!empty($_GET['id'])?$_GET['id']:$_POST['activityid'];
+		$param['activity_id']=$id;
 		$param['status']=1;
 		$optionsArr=M('activity_options')->field('id,options_content')->where($param)->select();
 		// var_dump($optionsArr);die;
@@ -289,15 +315,49 @@ class AdminController extends CommonController
 	 */
 	public function addoption(){
 		$this->checkUserId();
-		$content=$_GET['content'];
-		$activityId=$_GET['id'];
+		$content=$_POST['addoption'];
+		$activityId=$_POST['activityid'];
+		// var_dump($_FILES['myfile']);die;
+		if (!empty($_FILES['myfile']['name'])) {
+			if ($_FILES["myfile"]["error"] > 0)
+			  {
+			 	$this->error("Error: " . $_FILES["myfile"]["error"] . "<br />");
+			  }
+			else
+			  {
+			  // echo(C('UPLOAD_ACTIVITY_ADDR'));
+			  // echo "Upload: " . $_FILES["myfile"]["name"] . "<br />";
+			  // echo "Type: " . $_FILES["myfile"]["type"] . "<br />";die;
+			  // echo "Size: " . ($_FILES["myfile"]["size"] / 1000*1000) . " M<br />";
+			  // echo "Stored in: " . $_FILES["myfile"]["tmp_name"];die;
+			//文件上传类型
+				$uploadTypes=array('image/jpeg');
+				if (!in_array($_FILES["myfile"]["type"], $uploadTypes)) {
+					$this->error("上传文件类型错误，目前仅支持jpg格式！");
+				}
+				$maxUploadSize=2000000;//2M
+				if ($_FILES["myfile"]["size"]>$maxUploadSize) {
+					$this->error("上传文件最大不能超过2M！");
+				}
+			  	$dir=C('UPLOAD_OPTION_ADDR').'a'.$activityId.'/';
+				if (!is_dir($dir)) {
+					mkdir($dir,0777,true);
+				}
+				
+			}
+		}
 		$addparam['options_content']=$content;
 		$addparam['activity_id']=$activityId;
 		$addparam['status']=1;
 		$isnull=M('activity_options')->where($addparam)->find();
 		if (empty($isnull)) {
 			$addparam['create_datetime']=date('Y-m-d H:i:s');
-			M('activity_options')->data($addparam)->add();
+			$addRes=M('activity_options')->data($addparam)->add();
+			$newfilename=$dir.'/'.$addRes.'.jpg';
+			$moveRes=move_uploaded_file($_FILES["myfile"]["tmp_name"],$newfilename);
+			if ($moveRes==false && !empty($_FILES['myfile']['name'])) {
+				$this->error("图片上传失败！");
+			}
 			$this->optionlist();
 		}else{
 			$this->error('请不要重复插入！');
