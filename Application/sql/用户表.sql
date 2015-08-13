@@ -9,3 +9,4 @@ CREATE TABLE `vote_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='用户表';
+INSERT INTO `vote_user`(`account`,`passwd`,`status`,`type`,`create_datetime`) VALUES("admin","admin",1,1,"2015-08-10 00:00:00");

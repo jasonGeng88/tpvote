@@ -10,16 +10,26 @@
 	<h1>{$title}</h1>
 	<p>{$content}</p>
 	<p>活动执行时间：{$strDatetime} —— {$endDatetime}</p>
-	<p><a class="btn btn-primary btn-lg" href="#" role="button">查看结果</a></p>
+	<p><a class="btn btn-primary btn-lg" href="#" ro
 </div> -->
 
 	<volist name="activityArr" id="vo" key="k">
-	<div class="col-sm-6 col-md-4">
-		<div class="thumbnail">
+	<div class="col-sm-6 col-md-4">		<div class="thumbnail">
 			<?php $dir= C('IMG_ACTIVITY_ADDR').date('m',strtotime($vo['start_datetime'])).'/'.$vo['title'].'.jpg';
-				if (!file_exists($dir)) {
-					$dir=C('IMG_ACTIVITY_ADDR').'default/default.jpg';
-				}
+			// echo file_get_contents($dir);
+			if( !@fopen( $dir, 'r' ) )
+			{
+			    $dir=C('IMG_ACTIVITY_ADDR').'default/default.jpg';
+			}
+			
+
+			// $dir=str_replace('./', '', $dir);
+			// echo( $dir);
+			// $res=file_exists('http://localhost/test1.php');
+			// var_dump($res);
+				// if (!is_file($dir)) {
+				// 	$dir=C('IMG_ACTIVITY_ADDR').'default/default.jpg';
+				// }
 			?>
 			<img src="{$dir}" alt="...">
 			<div class="caption">

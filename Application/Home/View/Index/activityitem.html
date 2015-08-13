@@ -79,10 +79,14 @@
 	<volist name="optionsArr" id="vo" key="k">
 	<div class="col-sm-6 col-md-4">
 		<div class="thumbnail">
-			<?php $dir= C('IMG_OPTION_ADDR').'a'.$activityId.'/'.$vo['id'].'.jpg';
-				if (!file_exists($dir)) {
-					$dir=C('IMG_OPTION_ADDR').'default/default.jpg';
+			<?php $dir= C('IMG_OPTION_ADDR').'a'.$activityId.'/'.$vo['id'].'.jpg'; 
+				if( !@fopen( $dir, 'r' ) )
+				{
+				    $dir=C('IMG_ACTIVITY_ADDR').'default/default.jpg';
 				}
+				// if (!file_exists($dir)) {
+				// 	$dir=C('IMG_OPTION_ADDR').'default/default.jpg';
+				// }
 			?>
 			<img src="{$dir}" alt="...">
 			<div class="caption">
