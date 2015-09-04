@@ -366,6 +366,49 @@ class AdminController extends CommonController
 	}
 
 	/**
+	 * 查看投票结果
+	 */
+	public function voteresult(){
+		$this->checkUserId();
+		$params['status']=1;
+		$activityList = M('activity')->where($params)->select();
+		$this->assign('activitylist',$activityList);
+		// var_dump($activityList);
+		$this->display('voteresult');
+	}
+
+	/**
+	 * 查看投票结果 - item
+	 */
+	public function resultitem(){
+		$activityId = $_GET['id'];
+		$activityTitle = $_GET['title'];
+		//query option_list
+		$params['status']=1;
+		$params['activity_id']=$activityId;
+		$optionsList=M('activity_options')->where($params)->select();
+
+		//query option_user_list
+		$sql='SELECT count(option_id) AS counts,option_id FROM vote_options_record WHERE status=1 AND activity_id='.$activityId.' GROUP BY option_id';
+		$optionUserList=M()->query($sql);
+		$arr1 = array();
+		foreach ($optionUserList as $key => $value) {
+			$arr1[$value['option_id']]=$value['counts'];
+		}
+		foreach ($optionsList as $k => &$v) {
+			if (!isset($arr1[$v['id']])) {
+				$v['num']= 0;
+			}else{
+				$v['num'] = $arr1[$v['id']];
+			}
+		}
+		// var_dump($optionsList);die;
+		$this->assign('title',$activityTitle);
+		$this->assign('optionsList',$optionsList);
+		$this->display();
+	}
+
+	/**
 	 * 选项维护
 	 */
 	public function optionmaintain(){

@@ -1,0 +1,46 @@
+<include file="Public/header" />
+<include file="Public/side" />
+<script>
+	function voteResult(id){
+		var url='__URL__/resultitem/id/'+id;
+		// $('.change_form form').attr('action',url);
+		// $("#userid").val(id);
+		// var fieldH=$('fieldset').height();
+		// var formH=$('.form-content').height();
+		// console.log(formH-fieldH);
+		// $('#passwd').css('margin-bottom',formH-fieldH);
+		// $('.change_form').css('display','block');
+
+		// var userid=$("#userid").val();
+
+		window.location=url;
+	}
+</script>
+<div class="row col-xs-10">
+	<ol class="breadcrumb">
+	  <li><a href="__URL__/voteresult">投票结果</a></li>
+	  <li class="active">{$title|substr=0,30}</li>
+	</ol>
+	<ul class="list-group">
+	  <li class="list-group-item">
+	  	<div class="row col-xs-5">活动选项</div>
+	  	<div class="row col-xs-5">投票数量</div>
+	  	<div class="row col-xs-2">操作</div>
+	  </li>
+
+	  <volist name="optionsList" id="vo">
+	  	<li class="list-group-item">
+	  		<div class="row col-xs-5">{$vo.options_content|substr=0,30}</div>
+		  	<div class="row col-xs-5">
+				{$vo.num}
+		  	</div>
+		  	<div class="row col-xs-2">
+	  			<a href="javascript:void(0);" onclick="voteResult({$vo.id})">查看结果</a>
+		  	</div>
+	  	</li>
+	  </volist>
+	</ul>
+</div>
+
+
+<include file="Public/footer" />

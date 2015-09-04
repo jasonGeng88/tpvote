@@ -1,0 +1,42 @@
+<include file="Public/header" />
+<include file="Public/side" />
+<script>
+	function voteResult(id,title){
+		var url='__URL__/resultitem/id/'+id+'/title/'+title;
+		// $('.change_form form').attr('action',url);
+		// $("#userid").val(id);
+		// var fieldH=$('fieldset').height();
+		// var formH=$('.form-content').height();
+		// console.log(formH-fieldH);
+		// $('#passwd').css('margin-bottom',formH-fieldH);
+		// $('.change_form').css('display','block');
+
+		// var userid=$("#userid").val();
+
+		window.location=url;
+	}
+</script>
+<div class="row col-xs-10">
+	<ul class="list-group">
+	  <li class="list-group-item">
+	  	<div class="row col-xs-4">活动名称</div>
+	  	<div class="row col-xs-6">活动时间</div>
+	  	<div class="row col-xs-2">操作</div>
+	  </li>
+
+	  <volist name="activitylist" id="vo">
+	  	<li class="list-group-item">
+	  		<div class="row col-xs-4">{$vo.title|substr=0,30}</div>
+		  	<div class="row col-xs-6">
+				{$vo.start_datetime|substr=0,10} - {$vo.end_datetime|substr=0,10}
+		  	</div>
+		  	<div class="row col-xs-2">
+	  			<a href="javascript:void(0);" onclick="voteResult({$vo.id},'{$vo.title}')">查看结果</a>
+		  	</div>
+	  	</li>
+	  </volist>
+	</ul>
+</div>
+
+
+<include file="Public/footer" />

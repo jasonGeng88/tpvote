@@ -72,7 +72,7 @@
 	  <volist name="activityArr" id="vo">
 	  	<li class="list-group-item">
 	  		<div class="row col-xs-2">{$vo.title}</div>
-	  		<div class="row col-xs-4">{$vo.content}</div>
+	  		<div class="row col-xs-4">{$vo.content|substr=0,20}...</div>
 	  		<div class="row col-xs-2">{$vo.start_datetime|substr=0,10}</div>
 	  		<div class="row col-xs-2">{$vo.end_datetime|substr=0,10}</div>
 		  	<div class="row col-xs-2">
