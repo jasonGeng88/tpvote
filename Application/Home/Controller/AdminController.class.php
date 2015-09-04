@@ -111,6 +111,20 @@ class AdminController extends CommonController
 	}
 
 	/**
+	 * 删除用户
+	 */
+	public function deleteUser(){
+		$userId=$_GET['id'];
+		$sql='DELETE vu,vau,vor FROM vote_user AS vu LEFT JOIN vote_activity_user AS vau ON vu.id=vau.user_id LEFT JOIN vote_options_record AS vor ON vu.id=vor.user_id WHERE vu.id='.$userId;
+		$res=M()->execute($sql);
+		if (empty($res)) {
+			$this->error('删除失败!');
+		}else{
+			$this->userlist();
+		}
+	}
+
+	/**
 	 * 删除活动用户
 	 */
 	public function deleteActivityUser(){
@@ -403,8 +417,27 @@ class AdminController extends CommonController
 			}
 		}
 		// var_dump($optionsList);die;
+		$this->assign('activityId',$activityId);
 		$this->assign('title',$activityTitle);
 		$this->assign('optionsList',$optionsList);
+		$this->display();
+	}
+
+	/**
+	 * 
+	 */
+	public function resultitemuser(){
+		$optionId = $_GET['id'];
+		$optionTitle = $_GET['title'];
+		$activityId = $_GET['activityId'];
+		$activityTitle = $_GET['activityTitle'];
+		$sql='SELECT vu.account FROM vote_options_record AS vor LEFT JOIN vote_user AS vu ON vor.user_id=vu.id WHERE vor.status=1 AND vor.option_id = '.$optionId;
+		$userList=M()->query($sql);
+		$this->assign('userList',$userList);
+		$this->assign('optionId',$optionId);
+		$this->assign('optionTitle',$optionTitle);
+		$this->assign('activityId',$activityId);
+		$this->assign('activityTitle',$activityTitle);
 		$this->display();
 	}
 

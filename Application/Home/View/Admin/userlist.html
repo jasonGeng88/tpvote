@@ -55,6 +55,15 @@
 
 		// window.location='__URL__/changePasswd/id/'+id;
 	}
+	function deleteUser(id){
+		var r=confirm("将会删除该用户的所有记录，是否确认删除？");
+		if (r==true){
+			url='__URL__/deleteUser/id/'+id;
+			window.location=url;
+		}else{
+			return false;
+		}
+	}
 </script>
 <div class="row col-xs-10 insert_row">
 	<form action="__URL__/insertaccount" method="post">
@@ -95,6 +104,9 @@
 		  			<a href="__URL__/toggleaccount/id/{$vo.id}">启用</a>
 		  		</if>
 	  			<a href="javascript:void(0);" onclick="changePasswd({$vo.id})">密码修改</a>
+	  			<if condition="$vo.type == 0">
+	  				<a href="javascript:void(0);" onclick="deleteUser({$vo.id})">删除</a>
+			  	</if>
 		  		
 		  	</div>
 	  	</li>

@@ -1,8 +1,8 @@
 <include file="Public/header" />
 <include file="Public/side" />
 <script>
-	function voteResult(id){
-		var url='__URL__/resultitem/id/'+id;
+	function voteResultItem(id,title,activityId,activityTitle){
+		var url='__URL__/resultitemuser/id/'+id+'/title/'+title+'/activityId/'+activityId+'/activityTitle/'+activityTitle;
 		// $('.change_form form').attr('action',url);
 		// $("#userid").val(id);
 		// var fieldH=$('fieldset').height();
@@ -35,7 +35,7 @@
 				{$vo.num}
 		  	</div>
 		  	<div class="row col-xs-2">
-	  			<a href="javascript:void(0);" onclick="voteResult({$vo.id})">查看结果</a>
+	  			<a href="javascript:void(0);" onclick="voteResultItem({$vo.id},'{$vo.options_content}',{$activityId},'{$title}')">查看结果</a>
 		  	</div>
 	  	</li>
 	  </volist>

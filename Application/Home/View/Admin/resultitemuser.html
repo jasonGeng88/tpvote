@@ -1,0 +1,23 @@
+<include file="Public/header" />
+<include file="Public/side" />
+<div class="row col-xs-10">
+	<ol class="breadcrumb">
+	  <li><a href="__URL__/voteresult">投票结果</a></li>
+	  <li><a href="__URL__/resultitem/id/{$activityId}/title/{$activityTitle}">{$activityTitle|substr=0,30}</a></li>
+	  <li class="active">{$optionTitle|substr=0,30}</li>
+	</ol>
+	<ul class="list-group">
+	  <li class="list-group-item">
+	  	<div class="row col-xs-12">投票人员</div>
+	  </li>
+
+	  <volist name="userList" id="vo">
+	  	<li class="list-group-item">
+	  		<div class="row col-xs-12">{$vo.account}</div>
+	  	</li>
+	  </volist>
+	</ul>
+</div>
+
+
+<include file="Public/footer" />
